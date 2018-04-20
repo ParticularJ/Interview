@@ -8,10 +8,15 @@ class Solution{
 public:
   vector<int> merge(vector<int>& nums1, int m, vector<int>& nums2, int n){
     //int a = m>n? n:m;
-    for(int i=0;i<n;i++){
-      nums1.push_back(nums2[i]);
+    int a = m-1;
+    int b = n-1;
+    int temp = m+n-1;
+    while(a>=0 && b>=0){
+      nums1[temp--] = nums1[a] >= nums2[b] ? nums1[a--]:nums2[b--];
     }
-    sort(nums1.begin(), nums1.end());
+    while(b>=0){
+      nums1[temp--] = nums2[b--];
+    }
     return nums1;
   }
 
@@ -19,11 +24,11 @@ public:
 
 
 int main(){
-  vector<int> a = {1,2,3,4};
+  vector<int> a = {1,2,3,4, 0, 0,0};
   vector<int> b = {2, 3, 4};
   Solution mer;
   vector<int> c;
-  c=mer.merge(a,3,b,3);
+  c=mer.merge(a,4,b,3);
   for(auto s:c){
     cout<<s;
   }
