@@ -39,7 +39,7 @@ public:
 
 
 int main(){
-    Solution merge;
+    Solution = new merge;
     list<int> l1=(1,2,3);
     list<int> l2=(1,2,4);
     cout<<merge.mergeTwoLists(l1, l2);
