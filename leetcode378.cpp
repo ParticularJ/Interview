@@ -27,7 +27,8 @@ public:
     vector<int> cnt(size, 0);
     vector<int> res(size, 0);
     for(;mini<=maxi;){
-      int mid = (maxi+mini)>>1;
+      // 一定注意越界的情况发生
+      int mid = ((long long)maxi+mini)>>1;
       int sum=0;
       for(int i=0;i<size;i++){
         int l=L[i],r=R[i];
@@ -35,9 +36,9 @@ public:
         for(;l<=r;){
           int mid1 = (l+r)>>1;
           if(matrix[i][mid1]<=mid)
-            res[i]=mid1,l=mid+1;
+            res[i]=mid1,l=mid1+1;
           else
-            r=mid-1;
+            r=mid1-1;
         }
         sum+=cnt[i]+(res[i]-L[i]+1);
       }
@@ -62,6 +63,7 @@ public:
 
 int main(){
   vector<vector<int>> a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  //cout<<a.size();
   int b = 6;
   Solution kS;
   cout<<kS.kthSmallest(a, b);
