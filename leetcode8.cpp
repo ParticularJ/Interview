@@ -12,7 +12,7 @@ public:
     int start=0;
     for(int i=0;i<str.size();i++){
       if(str[i]==' ')start++;
-      else break;
+      else i=str.size();
     }
     int sign=1;
     for(int i=start;i<str.size();i++){
@@ -29,12 +29,12 @@ public:
   //  cout<<start<<endl;
     vector<int> temp;
     for(int i=start;i<str.size();i++){
-      if(str[0]==' '||(str[0]<='z' && str[0]>='a'))return 0;
       while('0'<=(str[i])&&(str[i])<='9'){
         res = res*10 + (str[i++]-'0');
         if(res*sign>((1<<31)-1))return  (1<<31)-1;
         if(res*sign<-(1<<31))return  -(1<<31);
       }
+      return res*sign;
     }
     return res*sign;
   }
