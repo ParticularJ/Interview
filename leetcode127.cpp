@@ -44,10 +44,10 @@ public:
     queue<int> que;
     vector<int> dist(size+2, (1<<31)-1);
     que.push(size);
-    dist[size]=1;
+    dist[size]=1;ex
     for(;que.size()>0;que.pop()){
       int n = que.front();
-      int d = dest[n];
+      int d = dist[n];
       for(auto dest:edge[n]){
         if(dist[dest]>d+1){
           dist[dest]=d+1;
