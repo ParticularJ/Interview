@@ -6,8 +6,8 @@ using namespace std;
 
 //思路：
 //使用DFS，将所有未被包围住的O的位置记录下来
-//最后去更欣所有这些位置的值
-
+//最后去更新所有这些位置的值
+//行和列的关系一定要搞清楚
 
 class Solution{
 public:
@@ -19,7 +19,7 @@ public:
     vector<vector<int> > alive(row, vector<int>(col, 0));
     queue<pair<int, int>> que;
     // 对第一行和最后一行的记录
-    for(int i=0;i<row;i++){
+    for(int i=0;i<col;i++){
       if(board[0][i]=='O'){
         que.push(make_pair(0, i));
         alive[0][i]=1;
@@ -30,7 +30,7 @@ public:
       }
     }
     //判断第一列于最后一列
-    for(int i=0;i<col;i++){
+    for(int i=0;i<row;i++){
       if(board[i][0]=='O'&&alive[i][0]==0){
         que.push(make_pair(i, 0));
         alive[i][0]=1;
