@@ -48,7 +48,7 @@ public:
           continue;
       }
       else{
-      //  cout<<s[i]<<endl;
+      //  要判断上一次的符号，从而区分乘除和加减的优先级
         while(!symbol.empty()&&(symbol.top()=='*'||symbol.top()=='/')){
           pop_stack();
         }
