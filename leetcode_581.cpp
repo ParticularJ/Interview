@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include<vector>
 #include<stack>
 #include<algorithm>
@@ -7,7 +7,7 @@
 using namespace std;
 
 // 掌握stack的使用,使用栈的方法，让它与栈顶元素比较，
-// 给定两个边界。
+//    给定两个边界。
 
 class Solution{
 public:
