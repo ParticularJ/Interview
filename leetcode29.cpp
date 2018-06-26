@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include<algorithm>
 #include<vector>
 
@@ -12,6 +12,7 @@ using namespace std;
 3*2^2+3*2^1 = 18>16,跳过
 3*2^2 + 3*2^0 = 15<16, 所以累加 2^0=1
 得 4+1=5
+
 */
 class Solution{
 public:
