@@ -31,9 +31,9 @@ public:
 			return NUll;
 		int root_val = pre[pl];
 		int val_in = il - 1;
-		for (int il; il <= ir; i++) {
-			if (in[il] == root_val)
-				val_in = il;
+		for (int i = il; i <= ir; i++) {
+			if (in[i] == root_val)
+				val_in = i;
 		}
 		TreeNode *res = New TreeNode(root_val);
 		int len_left = val_in - il;
