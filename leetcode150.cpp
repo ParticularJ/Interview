@@ -7,7 +7,8 @@ using namespace std;
 /*
 	两个函数：
 	atoi()字符串转为int
-	c_str()将字符串转为char
+	c_str()将字符串转为char[]格式
+	出栈与入栈的顺序
 */
 
 class Solution {
