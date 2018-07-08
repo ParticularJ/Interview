@@ -45,6 +45,8 @@ public:
 			}
 			else {
 				// 维持一个范围
+				//  我们使用一个单调递增序列，
+				// 每一位存储前缀和， 我们如果发现减去最小的前缀和为正，那么就是可行的
 				if (mini.front().first == i - 1)
 					mini.pop_front();
 				while (mini.size() > 0 && mini.back().second > lian[i + size - 1])
@@ -53,7 +55,7 @@ public:
 			}
 			if (mini.front().second - pre_sum >= 0)
 				return i;
-			pre_sum = pre[i];
+			pre_sum = lian[i];
 		}
 		return -1;
 	}
