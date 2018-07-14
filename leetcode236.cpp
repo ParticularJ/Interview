@@ -14,7 +14,13 @@
 */
 class Solution {
 public:
+	TreeNode* res;
+	dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
+		
+	}
 	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-
+		res = NULL;
+		dfs(root, p, q);
+		return res;
 	}
 };
