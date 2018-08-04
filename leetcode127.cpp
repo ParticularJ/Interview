@@ -7,6 +7,8 @@ using namespace std;
 //思路:最短路径的方法
 //构建图
 //之后使用求解最短路径的算法SPFA
+
+
 class Solution{
 public:
   int diff(string s, string e){
@@ -44,7 +46,7 @@ public:
     queue<int> que;
     vector<int> dist(size+2, (1<<31)-1);
     que.push(size);
-    dist[size]=1;ex
+    dist[size]=1;
     for(;que.size()>0;que.pop()){
       int n = que.front();
       int d = dist[n];
