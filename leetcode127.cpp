@@ -24,7 +24,9 @@ public:
     vector<vector<int> > edge(size+2, vector<int>());
     // 判断终止词的是不是在字典集里
     bool can_arrive = false;
-    if(diff(beginWord, endWord)==1)return 2;
+	if (diff(beginWord, endWord) == 1) {
+		edge[size].push_back(size + 1);
+	}
     for(int i=0;i<size;i++){
       for(int j=i+1;j<size;j++){
         if(diff(wordList[i], wordList[j])==1){
@@ -59,6 +61,44 @@ public:
         }
       }
     }
-    return 0;
+
+	// dijkstra 算法：
+	// 初始化距离
+	vector<int> dist(size + 2, (1 << 31) - 1);
+	// 确定是否遍历该顶点
+	vector<bool> flag(size + 2, 0);
+	// 统计上一步点的dist,
+	int lastVisited = 0;
+	int start = size;
+	flag[size] = 1;
+	
+	
+	for (int i = 0; i < size + 1; i++) {
+		for (int j = 0; j < size + 2; j++) {
+			if (flag[j] == 0) {
+				if (edge[start][j] != 0) {
+					int curr_dis = 1 + lastVisited;
+					if (dist[start] > curr_dis) {
+						dist[start] = curr_dis;
+					}
+				}
+			}
+		// 找出第一个未被遍历的点
+			int minIndex = 0;
+			while (flag[minIndex] == 1)minIndex++;
+			for（int j = minIndex; j < size + 2; j++ ）{
+				if (flag[j] == 0 && dist[j] == dist[size]) {
+					minIndex = j;
+				}
+			}
+			lastVisited = dist[minIndex];
+			start = minIndex;
+			flag[minIndex] = 1;
+		}
+	}
+    return dist[size+1];
   }
 };
+
+
+
