@@ -21,7 +21,7 @@ public:
   int ladderLength(string beginWord, string endWord, vector<string>& wordList){
     int size = wordList.size();
     //构建图，就要构建边，由于有beginword 和endword,边为size+2
-    vector<vector<int> > edge(size+2, vector<int>());
+    vector<vector<int> > edge(size+2, vector<int>(size+2, 999));
     // 判断终止词的是不是在字典集里
     bool can_arrive = false;
 	if (diff(beginWord, endWord) == 1) {
