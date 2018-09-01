@@ -20,7 +20,7 @@ public:
 		auto l = dfs(root->left, p, q);
 		auto r = dfs(root->right, p, q);
 		r.first |= l.first|(l==p);
-		r.second |= l.second(r==q);
+		r.second |= l.second|(r==q);
 		if (r.first&&r.second&&ret == NULL)ret = root;
 		return r;
 	}
