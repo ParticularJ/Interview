@@ -7,22 +7,18 @@ class Solution {
 public:
 	bool containsNearbyDuplicate(vector<int>& nums, int k) {
 		int size = nums.size();
-		set<int> s;
-		if (size == 0)return false;
-		int K = min(size-1, k);
-		for (int i = 0; i <= K; i++) {
-			if (s.find(nums[i])!=s.end())
+		set<int> record;
+		// 维持一个k大小的滑动窗口
+		for (int i = 0; i < nums.size(); i++) {
+			if (record.find(nums[i]) != record.end())
 				return true;
-			s.insert(nums[i]);
+			record.insert(nums[i]);
+
+			// 维持长度为k
+			if (record.size() == k + 1)
+				record.erase(nums[i - k]);
 		}
-		for (int i = k; i < size; i++) {
-			// 动态维护k长度的set
-			s.erase(nums[i - k -1]);
-			// 找到了
-			if (s.find(nums[i])!=s.end())
-				return true;
-			s.insert(nums[i]);
-		}
+		
 		return false;
 	}
 };
