@@ -12,20 +12,28 @@ using namespace std;
 class Solution{
 public:
   int numSquares(int n){
-    vector<int> square(n+1, -1);
-    square[0]=0;
-    queue<int> que;
-    que.push(0);
-    for(;que.empty()==false;que.pop()){
-      int m = que.front();
-      for(int i=1;i*i+m<=n;i++){
-        if(square[i*i+m]==-1){
-          square[i*i+m]=square[m]+1;
-          que.push(i*i+m);
-        }
-      }
-    }
-    return square[n];
+	  assert(n > 0);
+	  // 记录当前值和步数
+	  queue<pair<int, int> > q;
+	  q.push(make_pair(n, 0));
+	  vector<bool> visited(n + 1, false);
+	  visited[n] = true;
+	  while (q.size()) {
+		  int value = q.front().first;
+		  int step = q.front().second;
+		  q.pop();
+		  for (int i = 1;; i++) {
+			  int num = value - i*i;
+			  if (num < 0)
+				  break;
+			  if (num == 0)
+				  return step + 1;
+			  if (visited[num] == false) {
+				  q.push(make_pair(num, step + 1));
+				  visited[num] = true;
+			  }
+		  }
+	  }
   }
 };
 
