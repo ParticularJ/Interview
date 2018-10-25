@@ -9,22 +9,26 @@
 */
 class Solution {
 public:
-	vector<string> res;
-	void dfs(TreeNode* root, string v) {
-		if (v == "")
-			v += to_string(root->val);
-		else
-			v += "->" + to_string(root->val);
-		if (root->right == NULL && root->left == NULL)
-			res.push_back(v);
-		if (root->left)
-			dfs(root->left, v);
-		if (root->right)
-			dfs(root->right, v);
-	}
 	vector<string> binaryTreePaths(TreeNode* root) {
-		if (root == NULL)return res;
-		dfs(root, "");
+		vector<string> res;
+		if (root == NULL)
+			return res;
+		if (root->left == NULL && root->right == NULL) {
+			res.push_back(to_string(root->val));
+			return res;
+		}
+
+
+		vector<string> stringl = binaryTreePaths(root->left);
+
+		for (int i = 0; i<stringl.size(); i++) {
+			res.push_back(to_string(root->val) + "->" + stringl[i]);
+		}
+
+		vector<string> stringr = binaryTreePaths(root->right);
+		for (int i = 0; i<stringr.size(); i++) {
+			res.push_back(to_string(root->val) + "->" + stringr[i]);
+		}
 		return res;
 	}
 };
