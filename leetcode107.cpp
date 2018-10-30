@@ -1,4 +1,4 @@
-/**
+ /**
 * Definition for a binary tree node.
 * struct TreeNode {
 *     int val;
@@ -15,7 +15,7 @@ public:
 			dfs(root->left, depth + 1);
 		}
 
-		// 根据大小，给res添加一维数组
+		//      根据大小，给res添加一维数组
 		while (depth >= res.size()) 
 			res.push_back(vector<int>());
 		res[depth].push_back(root->val);
