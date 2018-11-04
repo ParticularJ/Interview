@@ -36,3 +36,44 @@ public:
 		return res;
 	}
 };
+
+
+
+
+class Solution {
+public:
+	vector<vector<int> > res;
+	vector<bool> flag;
+	void __permute(vector<int>& nums, int index, vector<int>& temp) {
+		if (index == nums.size()) {
+			res.push_back(temp);
+			return;
+		}
+
+		for (int i = 0; i < nums.size(); i++) {
+			if (!flag[i]) {
+				// 当i>0, i-1和i相等，并且i已经被取到，则不作处理
+				if (i > 0 && nums[i - 1] == nums[i] && flag[i - 1] == true)
+					continue;
+				temp.push_back(nums[i]);
+				flag[i] = true;
+				__permute(nums, index + 1, temp);
+				temp.pop_back();
+				flag[i] = false;
+			}
+		}
+
+	}
+	vector<vector<int>> permuteUnique(vector<int>& nums) {
+		int size = nums.size();
+		sort(nums.begin(), nums.end());
+		if (size == 0)
+			return res;
+		vector<int> temp;
+		flag = vector<bool>(size, 0);
+		__permute(nums, 0, temp);
+		return res;
+	}
+
+
+};
