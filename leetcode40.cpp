@@ -33,3 +33,51 @@ public:
 		return res;
 	}
 };
+
+
+/*
+Input: candidates = [10,1,2,7,6,1,5], target = 8,
+A solution set is:
+[
+[1, 7],
+[1, 2, 5],
+[2, 6],
+[1, 1, 6]
+]
+Example 2:
+
+Input: candidates = [2,5,2,1,2], target = 5,
+A solution set is:
+[
+[1,2,2],
+[5]
+]
+*/
+
+
+class Solution {
+public:
+	vector<vector<int> > res;
+	void dfs(vector<int> &cand, int index, int sum, int target, vector<int>& temp) {
+		if (sum == target) {
+			res.push_back(temp);
+			return;
+		}
+		if (sum > target)
+			return;
+
+		for (int i = index; i < cand.size(); i++) {
+			if (i > index && cand[i - 1] == cand[i])
+				continue;
+			temp.push_back(cand[i]);
+			dfs(cand, i+1, sum + cand[i], target, temp);
+			temp.pop_back();
+		}
+	}
+	vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+		vector<int> temp;
+		sort(candidates.begin(), candidates.end());
+		dfs(candidates, 0, 0, target, temp);
+		return res;
+	}
+};
