@@ -39,3 +39,47 @@ int main(){
   }
   return 0;
 }
+
+
+/*
+Given a set of distinct integers, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+Example:
+
+Input: nums = [1,2,3]
+Output:
+[
+[3],
+[1],
+[2],
+[1,2,3],
+[1,3],
+[2,3],
+[1,2],
+[]
+]
+*/
+class Solution {
+public:
+	vector<vector<int> > res;
+	void dfs(int index, vector<int>& nums, vector<int>& temp) {
+		res.push_back(temp);
+		for (int i = index; i < nums.size(); i++) {
+			temp.push_back(nums[i]);
+			dfs(i+1, nums, temp);
+			temp.pop_back();
+		}
+	}
+	vector<vector<int>> subsets(vector<int>& nums) {
+		res.clear();
+		int size = nums.size();
+		if (size == 0)
+			return res;
+		vector<int> temp;
+		dfs(nums, temp);
+		return res;
+	}
+};
+
