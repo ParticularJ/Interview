@@ -19,9 +19,34 @@ public:
 			}
 			if (flag[temp] == 0) {
 				res.push_back(temp);
-				flag[temp] = 1;
+				//flag[temp] = 1;
 			}
 		}
 		return res;
 	}
 };
+
+class Solution {
+public:
+	vector<vector<int> > res;
+	void dfs(int index, vector<int>& nums, vector<int>& temp) {
+		res.push_back(temp);
+		for (int i = index; i < nums.size(); i++) {
+			if (i > index && nums[i - 1] == nums[i])
+				continue;
+			temp.push_back(nums[i]);
+			dfs(i + 1, nums, temp);
+			temp.pop_back();
+		}
+	}
+	vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+		int size = nums.size();
+		sort(nums.begin(), nums.end());
+		if (size == 0)
+			return res;
+		vector<int> temp;
+		dfs(0, nums, temp);
+		return res;
+	}
+};
+
