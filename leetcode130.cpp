@@ -88,17 +88,62 @@ Explanation:
 Surrounded regions shouldn’t be on the border, which means that any 'O' on the border of the board are not flipped to 'X'. Any 'O' that is not on the border and it is not connected to an 'O' on the border will be flipped to 'X'. Two cells are connected if they are adjacent cells connected horizontally or vertically.
 */
 class Solution {
+private:
+	int row, col;
+	int d[4][2] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} };
+private:
+	bool inArea(int x, int y) {
+		return x >= 0 && x < row&&y >= 0 && y < col;
+	}
+
+	bool bfs(vector<vector<char>>& board, int x, int y, vector<vector<bool>> visited, vector<pair<int, int>>& record) {
+		queue<pair<int, int>> q;
+
+		bool ret = true;
+
+		visited[x][y] = true;
+		q.push(pair<int, int>(x, y));
+		while (!q.empty()) {
+			pair<int, int> cur = q.front();
+			q.pop();
+			record.push_back(pair<int, int>(cur.first, cur.second));
+
+			for (int i = 0; i < 4; i++) {
+				int newX = cur.first + d[i][0];
+				int newY = cur.second + d[i][1];
+
+				if (!inArea(newX, newY))
+					ret = false;
+				else if (board[newX][newY] == 'O' && !visited[newX][newY]) {
+					visited[newX][newY] = true;
+					q.push(pair<int, int>(newX, newY));
+				}
+			}
+		}
+		return ret;
+	}
+
+
+
 public:
 	void solve(vector<vector<char> >& board) {
-		int row = board.size();
+		row = board.size();
 		if (row == 0)
 			return;
-		int col = board[0].size();
+		col = board[0].size();
 		if (col == 0)
 			return;
+		vector<pair<int, int>> record;
 
-		for(int i=0;i<row;i++)
-			for(int j=0;j<col;j++)
-
+		vector<vector<bool> >visited = vector<vector<bool>>(row, vector<bool>(col, false));
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (!visited[i][j] && board[i][j] == 'O')
+					if (bfs(board, i, j, visited, record)
+						for (int k = 0; i < record.size(); k++)
+							board[record[k].first][record[k].second] = 'X';
+			}
+		}
+		return;
 	}
 };
