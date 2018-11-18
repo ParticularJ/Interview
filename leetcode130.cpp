@@ -133,13 +133,15 @@ public:
 		col = board[0].size();
 		if (col == 0)
 			return;
-		vector<pair<int, int>> record;
-
+		// 记录当前位置的坐标
+		vector<pair<int, int> > record;
+		// 判断有没有走过该位置
 		vector<vector<bool> >visited = vector<vector<bool>>(row, vector<bool>(col, false));
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				if (!visited[i][j] && board[i][j] == 'O')
 					if (bfs(board, i, j, visited, record)
+						// 将所有的'O'变为'X'
 						for (int k = 0; i < record.size(); k++)
 							board[record[k].first][record[k].second] = 'X';
 			}
