@@ -90,60 +90,62 @@ Surrounded regions shouldn’t be on the border, which means that any 'O' on the
 class Solution {
 private:
 	int row, col;
-	int d[4][2] = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} };
-private:
+	vector<vector<bool> > visited;
+	int d[4][2] = { { 1, 0 },{ 0, 1 },{ -1, 0 },{ 0, -1 } };
 	bool inArea(int x, int y) {
-		return x >= 0 && x < row&&y >= 0 && y < col;
+		return x >= 0 && x<row && y >= 0 && y<col;
 	}
 
-	bool bfs(vector<vector<char>>& board, int x, int y, vector<vector<bool>> visited, vector<pair<int, int>>& record) {
+private:
+	bool bfs(vector<vector<char> >& board, int x, int y, vector<pair<int, int> >& record) {
 		queue<pair<int, int>> q;
-
+		q.push(make_pair(x, y));
+		visited[x][y] = true;
 		bool ret = true;
 
-		visited[x][y] = true;
-		q.push(pair<int, int>(x, y));
+
 		while (!q.empty()) {
-			pair<int, int> cur = q.front();
+			pair<int, int> start = q.front();
 			q.pop();
-			record.push_back(pair<int, int>(cur.first, cur.second));
-
-			for (int i = 0; i < 4; i++) {
-				int newX = cur.first + d[i][0];
-				int newY = cur.second + d[i][1];
-
+			record.push_back(make_pair(start.first, start.second));
+			for (int i = 0; i<4; i++) {
+				int newX = start.first + d[i][0];
+				int newY = start.second + d[i][1];
 				if (!inArea(newX, newY))
 					ret = false;
-				else if (board[newX][newY] == 'O' && !visited[newX][newY]) {
+				else if (!visited[newX][newY] && board[newX][newY] == 'O') {
 					visited[newX][newY] = true;
-					q.push(pair<int, int>(newX, newY));
+					q.push(make_pair(newX, newY));
 				}
 			}
 		}
 		return ret;
 	}
 
-
-
 public:
-	void solve(vector<vector<char> >& board) {
+	void solve(vector<vector<char>>& board) {
 		row = board.size();
 		if (row == 0)
 			return;
 		col = board[0].size();
 		if (col == 0)
 			return;
-		// 记录当前位置的坐标
+		// 判断有没有走过某些位置
+		visited = vector<vector<bool> >(row, vector<bool>(col, false));
+		// 记录符合要求的'O'坐标
 		vector<pair<int, int> > record;
-		// 判断有没有走过该位置
-		vector<vector<bool> >visited = vector<vector<bool>>(row, vector<bool>(col, false));
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				if (!visited[i][j] && board[i][j] == 'O')
-					if (bfs(board, i, j, visited, record)
-						// 将所有的'O'变为'X'
-						for (int k = 0; i < record.size(); k++)
+		record.clear();
+		for (int i = 0; i<row; i++) {
+			for (int j = 0; j<col; j++) {
+				if (!visited[i][j] && board[i][j] == 'O') {
+					// 统计完一部分后要将之清零
+					record.clear();
+					if (bfs(board, i, j, record)) {
+						for (int k = 0; k<record.size(); k++) {
 							board[record[k].first][record[k].second] = 'X';
+						}
+					}
+				}
 			}
 		}
 		return;
