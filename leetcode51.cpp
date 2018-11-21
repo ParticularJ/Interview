@@ -62,6 +62,7 @@ private:
 	vector<string> generateBoard(int n, vector<int>& record) {
 		assert(record.size() == n);
 		// 先将每一行变为 .... 
+		// STRING 的用法值得注意
 		vector<string> board(n,  string(n, '.'));
 		// 将对应存储的坐标变为Q
 		for (int i = 0; i < record.size(); i++) {
