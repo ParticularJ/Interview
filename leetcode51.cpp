@@ -74,7 +74,9 @@ private:
 public:
 	vector<vector<string> > solveQueues(int n) {
 		res.clear();
+		// 将对应的列标记，
 		col = vector<bool>(n, false);
+		// 两个对角线的标记
 		diag1 = vector<bool>(2 * n - 1, false);
 		diag2 = vector<bool>(2 * n - 1, false);
 		vector<int> record;
