@@ -36,6 +36,7 @@ private:
 			return;
 		}
 
+		// 回溯法
 		for (int i = 0; i < n; i++) {
 			if (!col[i] && !diag1[i + index] && !diag2[i - index + n - 1]) {
 				col[i] = true;
@@ -51,9 +52,11 @@ private:
 	}
 public:
 	int totalNQueens(int n) {
+		// 初始化col以及 diag1， diag2
 		col = vector<bool>(n, false);
 		diag1 = vector<bool>(2 * n - 1, false);
 		diag2 = vector<bool>(2 * n - 1, false);
+		// 回溯法求解可能的解
 		findQueens(n, 0);
 		return res;
 	}
