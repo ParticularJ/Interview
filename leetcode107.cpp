@@ -19,13 +19,15 @@ public:
 		while (depth >= res.size()) 
 			res.push_back(vector<int>());
 		res[depth].push_back(root->val);
+		
 		if (root->right) {
 			dfs(root->right, depth + 1);
 		}
 	}
 
 	vector<vector<int>> levelOrderBottom(TreeNode* root) {
-		if (root == NULL)return res;
+		if (root == NULL)
+			return res;
 		dfs(root, 0);
 		reverse(res.begin(), res.end());
 		return res;
