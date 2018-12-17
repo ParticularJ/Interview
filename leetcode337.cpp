@@ -65,3 +65,34 @@ Output: 9
 Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.
 */
 
+
+/**
+* Definition for a binary tree node.
+* struct TreeNode {
+*     int val;
+*     TreeNode *left;
+*     TreeNode *right;
+*     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+* };
+*/
+class Solution {
+public:
+	int rot_tree(TreeNode* root, bool conclude) {
+		if (root == NULL)
+			return 0;
+		// 不偷当前
+		int res = rot_tree(root->left, true) + rot_tree(root->right, true);
+
+		if (conclude) {
+			// 偷当前，不偷左子树和右子树
+			res = max(res, root->val + rot_tree(root->left, false) + rot_tree(root->right, false));
+		}
+		return res;
+	}
+	int rob(TreeNode* root) {
+		if (root == NULL)
+			return 0;
+		return rot_tree(root, true);
+	}
+};
+
