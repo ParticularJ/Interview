@@ -36,6 +36,7 @@ public:
 		memo = vector<vector<int>>(size, vector<int>(C + 1, -1));
 		for (int i = 0; i <= C; i++)
 			memo[0][i] = i > w[i] ? v[0] : 0;
+
 		// 传入w, v, 遍历到的元素，以及容量
 		return findValue(w, v, size - 1, C);
 	}
