@@ -33,6 +33,7 @@ private:
 public:
 	int packet(vector<int>& w, vector<int>& v, int C) {
 		int size = w.size();
+<<<<<<< HEAD
 		if (size == 0)
 			return 0;
 		memo = vector<vector<int>>(size, vector<int>(C + 1, 0));
@@ -47,6 +48,12 @@ public:
 			}
 		}
 		return memo[size-1][C];
+=======
+		memo = vector<vector<int>>(size, vector<int>(C + 1, -1));
+		for (int i = 0; i <= C; i++)
+			memo[0][i] = i > w[i] ? v[0] : 0;
+
+>>>>>>> temp1
 		// 传入w, v, 遍历到的元素，以及容量
 		// 递归
 		// return findValue(w, v, size - 1, C);
