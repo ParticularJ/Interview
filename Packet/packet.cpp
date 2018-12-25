@@ -33,7 +33,7 @@ private:
 public:
 	int packet(vector<int>& w, vector<int>& v, int C) {
 		int size = w.size();
-<<<<<<< HEAD
+
 		if (size == 0)
 			return 0;
 		memo = vector<vector<int>>(size, vector<int>(C + 1, 0));
@@ -48,17 +48,37 @@ public:
 			}
 		}
 		return memo[size-1][C];
-=======
+
 		memo = vector<vector<int>>(size, vector<int>(C + 1, -1));
 		for (int i = 0; i <= C; i++)
 			memo[0][i] = i > w[i] ? v[0] : 0;
 
->>>>>>> temp1
 		// 传入w, v, 遍历到的元素，以及容量
 		// 递归
 		// return findValue(w, v, size - 1, C);
 	}
+
+public:
+	int packet1(vector<int>& w, vector<int>& v, int C) {
+		int size = w.size();
+		if (size == 0 || C == 0)
+			return 0;
+		// 用一个vector记录，从右往左更新
+		vector<int> record(C + 1, -1);
+		for (int i = 0; i < C + 1; i++)
+			record[i] = i > w[0] ? v[0] : 0;
+		for (int i = 1; i < size; i++) {
+			for (int j = C; j >= w[i]; j--) {
+				record[i] = max(record[i - w[i]], v[i] + record[i - w[i]]);
+			}
+		}
+
+		return record[C];
+
+	}
 };
+
+ 
 
 
 int main()
