@@ -1,0 +1,9 @@
+﻿  SeedSizeDLL.cpp
+     Creating library C:\Myself\Opencv_Project\SeedSizeDLL\x64\Release\SEEDSIZEDLL.lib and object C:\Myself\Opencv_Project\SeedSizeDLL\x64\Release\SEEDSIZEDLL.exp
+  Generating code
+  10 of 913 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  SeedSizeDLL.vcxproj -> C:\Myself\Opencv_Project\SeedSizeDLL\x64\Release\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> C:\Myself\Opencv_Project\SeedSizeDLL\x64\Release\SEEDSIZEDLL.pdb (Full PDB)

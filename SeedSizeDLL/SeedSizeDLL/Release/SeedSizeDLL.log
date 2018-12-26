@@ -1,0 +1,63 @@
+﻿  dllmain.cpp
+  SeedSizeDLL.cpp
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(62): warning C4251: 'plantInfo::dst_L': class 'cv::Mat' needs to have dll-interface to be used by clients of class 'plantInfo'
+  C:\Program Files (x86)\opencv\build\include\opencv2/core/mat.hpp(780): note: see declaration of 'cv::Mat'
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(62): warning C4251: 'plantInfo::dst_R': class 'cv::Mat' needs to have dll-interface to be used by clients of class 'plantInfo'
+  C:\Program Files (x86)\opencv\build\include\opencv2/core/mat.hpp(780): note: see declaration of 'cv::Mat'
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(67): warning C4251: 'plantInfo::flag': class 'std::vector<bool,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'plantInfo'
+          with
+          [
+              _Ty=bool
+          ]
+  C:\Program Files (x86)\opencv\build\include\opencv2/core/mat.hpp(186): note: see declaration of 'std::vector<bool,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=bool
+          ]
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(70): warning C4251: 'plantInfo::contours': class 'std::vector<std::vector<cv::Point,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'plantInfo'
+          with
+          [
+              _Ty=cv::Point
+          ]
+  C:\Program Files (x86)\opencv\build\include\opencv2/features2d.hpp(403): note: see declaration of 'std::vector<std::vector<cv::Point,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>'
+          with
+          [
+              _Ty=cv::Point
+          ]
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(72): warning C4251: 'plantInfo::final_pic': class 'cv::Mat' needs to have dll-interface to be used by clients of class 'plantInfo'
+  C:\Program Files (x86)\opencv\build\include\opencv2/core/mat.hpp(780): note: see declaration of 'cv::Mat'
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(74): warning C4251: 'plantInfo::heierarchy': class 'std::vector<cv::Vec4i,std::allocator<_Ty>>' needs to have dll-interface to be used by clients of class 'plantInfo'
+          with
+          [
+              _Ty=cv::Vec4i
+          ]
+  c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(74): note: see declaration of 'std::vector<cv::Vec4i,std::allocator<_Ty>>'
+          with
+          [
+              _Ty=cv::Vec4i
+          ]
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(76): warning C4251: 'plantInfo::myqueH': class 'std::priority_queue<std::pair<int,cv::RotatedRect>,std::vector<std::pair<int,cv::RotatedRect>,std::allocator<_Ty>>,cmpH>' needs to have dll-interface to be used by clients of class 'plantInfo'
+          with
+          [
+              _Ty=std::pair<int,cv::RotatedRect>
+          ]
+  c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(76): note: see declaration of 'std::priority_queue<std::pair<int,cv::RotatedRect>,std::vector<std::pair<int,cv::RotatedRect>,std::allocator<_Ty>>,cmpH>'
+          with
+          [
+              _Ty=std::pair<int,cv::RotatedRect>
+          ]
+c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(78): warning C4251: 'plantInfo::myqueW': class 'std::priority_queue<std::pair<int,cv::RotatedRect>,std::vector<std::pair<int,cv::RotatedRect>,std::allocator<_Ty>>,cmpW>' needs to have dll-interface to be used by clients of class 'plantInfo'
+          with
+          [
+              _Ty=std::pair<int,cv::RotatedRect>
+          ]
+  c:\myself\opencv_project\seedsizedll\seedsizedll\API_SeedSize.h(78): note: see declaration of 'std::priority_queue<std::pair<int,cv::RotatedRect>,std::vector<std::pair<int,cv::RotatedRect>,std::allocator<_Ty>>,cmpW>'
+          with
+          [
+              _Ty=std::pair<int,cv::RotatedRect>
+          ]
+SeedSizeDLL.cpp(35): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(166): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(238): warning C4018: '<': signed/unsigned mismatch
+  stdafx.cpp
+opencv_world340.lib(opencv_world340.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'
