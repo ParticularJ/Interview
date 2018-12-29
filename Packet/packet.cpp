@@ -64,6 +64,8 @@ public:
 		if (size == 0 || C == 0)
 			return 0;
 		// 用一个vector记录，从右往左更新
+		// 因为他当前值和当前值以及当前值减去weight值对应的value有关，
+		
 		vector<int> record(C + 1, -1);
 		for (int i = 0; i < C + 1; i++)
 			record[i] = i > w[0] ? v[0] : 0;
