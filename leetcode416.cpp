@@ -55,5 +55,20 @@ public:
 		return findPartition(nums, size-1, sum / 2);
 
 	}
+
+public:
+	bool canPartition1(vector<int>& nums) {
+		//¶¯Ì¬¹æ»®
+		int size = nums.size();
+		int sum = 0;
+		for (int i = 0; i < size; i++) {
+			sum += nums[i];
+		}
+		if (sum % 2 != 0)
+			return false;
+
+
+
+	}
 };
 
