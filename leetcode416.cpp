@@ -66,9 +66,14 @@ public:
 		}
 		if (sum % 2 != 0)
 			return false;
-
-
-
+		int C = sum / 2;
+		vector<bool> memo = vector<bool>(C + 1£¬ false);
+		for (int i = 0; i < C + 1; i++)
+			memo[i] = (nums[0] == i);
+		for (int i = 1; i < C + 1; i++)
+			for (int j = C; j > nums[i]; j--)
+				memo[i] = memo[j - 1] || memo[j - nums[i]];
+		return memo[C];
 	}
 };
 
