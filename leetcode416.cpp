@@ -69,10 +69,12 @@ public:
 		int C = sum / 2;
 		vector<bool> memo = vector<bool>(C + 1， false);
 		for (int i = 0; i < C + 1; i++)
+			// 第一行，能放进对应的nums[0]为true
 			memo[i] = (nums[0] == i);
-		for (int i = 1; i < C + 1; i++)
+		for (int i = 1; i < size; i++)
 			for (int j = C; j > nums[i]; j--)
-				memo[i] = memo[j - 1] || memo[j - nums[i]];
+				// 当前已经填满，使用当前，再看memo[j-nums[i]]能不能被填满
+				memo[i] = memo[j] || memo[j - nums[i]];
 		return memo[C];
 	}
 };
