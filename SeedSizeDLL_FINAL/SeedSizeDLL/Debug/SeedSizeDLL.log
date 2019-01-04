@@ -1,0 +1,11 @@
+﻿  stdafx.cpp
+  SeedSizeDLL.cpp
+d:\myself\opencv_project\seedsizedll - 副本\seedsizedll\seedsizedll.cpp(85): warning C4018: '<': signed/unsigned mismatch
+d:\myself\opencv_project\seedsizedll - 副本\seedsizedll\seedsizedll.cpp(217): warning C4018: '<': signed/unsigned mismatch
+d:\myself\opencv_project\seedsizedll - 副本\seedsizedll\seedsizedll.cpp(290): warning C4018: '<': signed/unsigned mismatch
+  callAPI.cpp
+  Generating Code...
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Debug\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Debug\SEEDSIZEDLL.exp
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Debug\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Debug\SEEDSIZEDLL.pdb (Full PDB)

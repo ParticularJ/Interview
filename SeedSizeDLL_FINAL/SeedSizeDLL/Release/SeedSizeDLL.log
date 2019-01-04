@@ -1,0 +1,13 @@
+﻿  callAPI.cpp
+  SeedSizeDLL.cpp
+SeedSizeDLL.cpp(85): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(217): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(290): warning C4018: '<': signed/unsigned mismatch
+  stdafx.cpp
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Release\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Release\SEEDSIZEDLL.exp
+  Generating code
+  All 632 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Release\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL - 副本\Release\SEEDSIZEDLL.pdb (Full PDB)
