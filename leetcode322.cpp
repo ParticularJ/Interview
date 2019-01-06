@@ -42,7 +42,19 @@ class Solution {
 public:
 	int coinChange(vector<int>& coins, int amount) {
 		int size = coins.size();
-		vector<int> memo(amount + 1, -1);
+		// 记录要多少个coins才能填满，最多就是amount个
+		vector<int> memo(amount + 1, amount+1);
+		// 第一个为0
+		memo[0] = 0;
+		for (int i = 1; i < amount + 1; i++) {
+			for (int coin : coins) {
+				if (i >= coin)
+					// 如果能放下， 判别当前的重量和放下当前的重量看哪个小。
+					memo[i] = min(memo[i], 1 + memo[i - coin]);
+			}
+		}
+
+		return memo[amount] == amount + 1 ? -1 : memo[amount];
 
 	}
 };
