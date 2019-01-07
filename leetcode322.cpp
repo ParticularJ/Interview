@@ -49,6 +49,8 @@ public:
 		for (int i = 1; i < amount + 1; i++) {
 			for (int coin : coins) {
 				if (i >= coin)
+
+
 					// 如果能放下， 判别当前的重量和放下当前的重量看哪个小。
 					memo[i] = min(memo[i], 1 + memo[i - coin]);
 			}
