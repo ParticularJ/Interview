@@ -27,10 +27,21 @@ public:
 		if (size == 0)
 			return 0;
 		sort(nums.begin(), nums.end());
+		// 初始化数组
 		vector<int> memo(target + 1, 0);
-		for(int i=0;i<size;i++)
-			for(int j=0;j<target+1;j++)
-				memo[j] = max()
+		memo[0] = 1;
+
+		for (int i = 1; i < target+1; i++)
+			for (int j = 0; j < size; j++)
+				if (i >= nums[j])
+					// 模拟背包，放入1的个数位1
+					// 放入2 可以为 1 1 ，  2 0
+					// memo[2] = memo[2] + memo[2-1]
+					// memo[2] = memo[2] + memo[2-2]
+					// 依次类推
+					memo[j] += memo[j - nums[i]];
+
+		return memo[target];
 
 
 
