@@ -53,6 +53,9 @@ private:
 		float height = 0;
 		float width = 0;
 		size_t size = H.size();
+		for (int i = 0; i < 10; i++) {
+			H.pop();
+		}
 		while (!H.empty()) {
 			RotatedRect res = H.top().second;
 			float h = max(res.size.height, res.size.width);
@@ -63,15 +66,25 @@ private:
 		}
 	
 	//	cout << height<<" "<< size << " " << width << endl;
-		return make_pair(height / size, width / size);
+		return make_pair(height / (size-10), width / (size-10));
 	}
 
 
 	// 寻找外接矩形
-	void findRect() {
+	void findRect(Mat &dst1) {
 		record = vector<Mat>(contours.size(), Mat());
 		for (int i = 0; i < contours.size(); i++) {
 			RotatedRect rect = minAreaRect(contours[i]);
+
+			Point2f P[4];
+			rect.points(P);
+			// 绘制出轮廓
+			for (int j = 0; j <= 3; j++)
+			{
+				//	//cout << P[j];
+				line(dst1, P[j], P[(j + 1) % 4], Scalar(255, 0, 255), 2);
+
+			}
 			// rect.boundingRect
 			// 分别对高和宽进行排序
 			sort_record(make_pair(i, rect));
@@ -79,6 +92,7 @@ private:
 	}
 
 	// 将结果放入同一张图中
+	// flag 0 为长，1为宽
 	void putROI(Mat &roi, int flag) {
 		Mat roi_img;
 
@@ -108,7 +122,7 @@ private:
 
 
 	//计算旋转后的坐标
-	pair<Point2f, Point2f> caclAngle(float angle, Point2f P[4], RotatedRect res) {
+	pair<Point2f, Point2f> caclAngle(float angle, Point2f P[4], RotatedRect& res) {
 		// 计算旋转之后P[0]与P[2]的坐标
 		Point2f Q[2];
 		float angle_arc = static_cast<float>(PI / 180.0 * angle);
@@ -121,7 +135,21 @@ private:
 		return make_pair(Q[0], Q[1]);
 	}
 
-	// 
+	// test 旋转矩阵
+	pair<Point2f, Point2f> caclAngle(float angle, Point2f P[4], Point2f &center) {
+		// 计算旋转之后P[0]与P[2]的坐标
+		Point2f Q[2];
+		float angle_arc = static_cast<float>(PI / 180.0 * angle);
+
+		//  绕某个中心的旋转公式
+		Q[0].x = (P[0].x - center.x)*cos(angle_arc) - (center.y - P[0].y)*sin(angle_arc) + center.x ;
+		Q[0].y = center.y - (P[0].x - center.x)*sin(angle_arc) - (center.y - P[0].y)*cos(angle_arc) ;
+		Q[1].x = (P[2].x - center.x)*cos(angle_arc) - (center.y - P[2].y)*sin(angle_arc) + center.x ;
+		Q[1].y = center.y - (P[2].x - center.x)*sin(angle_arc) - (center.y - P[2].y)*cos(angle_arc) ;
+		return make_pair(Q[0], Q[1]);
+	}
+
+	
 	void get_rotMat(RotatedRect& res, Mat &rot_mat, float& angle, int flag) {
 		if (flag == 0) {
 		//	cout << "Height" << res.size.height << endl;
@@ -183,6 +211,72 @@ private:
 		}
 	}
 
+	//  test 得到旋转矩阵以及角度
+
+	void get_rotMat(RotatedRect& res, Mat &rot_mat, Point2f &center, float& angle, int flag) {
+		if (flag == 0) {
+			//	cout << "Height" << res.size.height << endl;
+			//	cout << "Width" << res.size.width << endl;
+			if (res.size.width > res.size.height) {
+				if (res.angle != 0) {
+					angle = 90 + res.angle;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//			cout << "trans angle:" << angle << endl;
+
+				}
+				else {
+					angle = 90;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//			cout << "trans angle:" << angle << endl;
+				}
+
+			}
+			else {
+				if (res.angle != 0) {
+					angle = res.angle;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//			cout << "trans angle:" << angle << endl;
+				}
+				else {
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+				}
+			}
+		}
+		else {
+			//	cout << "Height" << res.size.height << endl;
+			//	cout << "Width" << res.size.width << endl;
+			//	cout << "The angle" << res.angle << endl;
+			if (res.size.width < res.size.height) {
+				if (res.angle != 0) {
+					angle = (90 + res.angle);
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//			cout << "trans angle:" << angle << endl;
+
+				}
+				else {
+					angle = 90;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//			cout << "trans angle:" << angle << endl;
+				}
+
+			}
+			else {
+				if (res.angle != 0) {
+					angle = res.angle;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+					//		cout << "trans angle:" << angle << endl;
+				}
+				else {
+					angle = 0;
+					rot_mat = getRotationMatrix2D(center, angle, 1);
+				}
+			}
+		}
+	}
+
+
+
+
 
 	// 展示高
 	// dst为对应的原图
@@ -191,6 +285,7 @@ private:
 		new_line = 0;
 		
 		for (int i = 0; i < 20; i++) {
+		//	clock_t s2 = clock();
 			// 拷贝一份新图
 			Mat dst1 = dst.clone();
 		//	display(dst1, "dst1");
@@ -216,17 +311,17 @@ private:
 			
 			const float height = max(res.size.height, res.size.width);
 			const float width = min(res.size.height, res.size.width);
-		    // cout << height<<" "<< width<< endl;
+		    cout << height<<" "<< width<< endl;
+			
 
-
-			if (abs(height - avgHeight) > avgHeight/ 1.5 || abs(width - avgWidth) > avgWidth/ 1.5) {
+			if (abs(height - avgHeight) > avgHeight/ 3 || abs(width - avgWidth) > avgWidth/ 2) {
 				// 展示错误图像
-				//for (int j = 0; j <= 3; j++) {
-				//	//	//	//cout << P[j];
-				//	line(dst1, P[j], P[(j + 1) % 4], Scalar(0, 255, 0), 3);
-				//}
-				//// resize(dst1, dst1, Size(800, 600));
-				//display(dst1, "error1");
+				for (int j = 0; j <= 3; j++) {
+					//	//	//cout << P[j];
+					line(dst1, P[j], P[(j + 1) % 4], Scalar(0, 255, 0), 3);
+				}
+				// resize(dst1, dst1, Size(800, 600));
+				display(dst1, "error1");
 				i--;
 				continue;
 			}
@@ -235,45 +330,118 @@ private:
 			Mat rot_mat;
 			float angle = 0;
 
+
+
+			/*
+
+			// 测试分割开旋转，截取
+		//	clock_t s2 = clock();
+			Mat mask, seg_mat, seg_final;
+			// 获得mask
+			mask = dst1(Rect(res.boundingRect().tl(), res.boundingRect().br()));
+			seg_mat = mask.clone();
+			// 计算便宜，使得图像都从左上角开始
+			int off_x = res.boundingRect().tl().x ;
+			int off_y = res.boundingRect().tl().y ;
+			
+			// 计算轮廓的偏移量
+			for (int i = 0; i < contours[ConNum].size(); i++) {
+				contours[ConNum][i].x -= off_x;
+				contours[ConNum][i].y -= off_y;
+			}
+			flag[ConNum] = 1;
+
+			clock_t t = clock();
+			// 以填充的方式画出轮廓，形成最后的mask图
+			drawContours(mask, contours, ConNum, Scalar(255, 255, 255), -1);
+			cvtColor(mask, mask, CV_RGB2GRAY);
+			threshold(mask, mask, 254, 255, THRESH_BINARY);
+			clock_t e = clock();
+			cout << e - t << "ms" << endl;
+			// 二值图转为三通道图
+			mask.convertTo(mask, CV_8UC3);
+			// 进行切割
+			seg_mat.copyTo(seg_final, mask);
+			// 扩充，防止旋转时候越界
+			int border = 70;
+			copyMakeBorder(seg_final, seg_final, border, border, border, border, BORDER_CONSTANT, Scalar(0, 0, 0));
+			
+
+
+
+			// 得到旋转矩阵和旋转角度
+			Point2f center;
+			center.x = res.center.x - off_x + border;
+			center.y = res.center.y - off_y + border;
+			
+			get_rotMat(res, rot_mat, center, angle, 0);
+			P[0].x -= (off_x - border);
+			P[0].y -= (off_y - border);
+			P[2].x -= (off_x - border);
+			P[2].y -= (off_y - border);
+			pair<Point2f, Point2f> Q_t = caclAngle(angle, P, center);
+
+		//	cout << "P1:"<<P[0] << " " << "Q1"<<Q_t.first << endl;
+		//	cout << "P2:"<<P[2] << " " << "Q2"<<Q_t.second << endl;
+			Mat test_rot;
+		//	display(seg_final, "seg");
+		//	cout << seg_final.size();
+			warpAffine(seg_final, test_rot, rot_mat, seg_final.size());
+		//	cout << test_rot.size();
+			Mat final_test;
+		    final_test = test_rot(Rect(Q_t.first, Q_t.second));
+			putROI(final_test, 0);
+		//	display(test_rot, "test_rot");
+		//	imshow("test", final_test);
+		//	waitKey(0);
+			//cout<<contours[ConNum].size();
+		//	clock_t e2 = clock();
+		//	cout << "contours time:" << e2 - s2 << "ms" << endl;
+			
+			*/
+
+
+			
+
 			// 得到旋转矩阵和旋转角度
 			get_rotMat(res, rot_mat, angle, 0);
 			
 			// 得到ROI所需的左上角和右下角的点
 			pair<Point2f, Point2f> Q = caclAngle(angle, P, res);
-			clock_t s1 = clock();
 
 			// 修改过后图片
 			drawCon(dst1, ConNum, res);
 		//	display(dst1, "dst1");
 			// 修改过的图
 			Mat dst2 = record[ConNum];
-			threshold(dst2, dst2, 244, 255, THRESH_BINARY);
-			Mat dst3;
-			dst2.convertTo(dst2, CV_8UC3);
+			//threshold(dst2, dst2, 244, 255, THRESH_BINARY);
+			//Mat dst3;
+			//dst2.convertTo(dst2, CV_8UC3);
 		
-			dst.copyTo(dst3, dst2);
-			clock_t e1 = clock();
-			cout << "copy" << e1 - s1 << "ms" << endl;
+			//dst.copyTo(dst3, dst2);
+	
 		//	display(dst3, "test1");
 
 
 			// 旋转之后的图像
-			size_t s = clock();
+	
 			Mat rot_image;
-			warpAffine(dst3, rot_image, rot_mat, Size(dst2.size()));//原图像旋转
-			size_t e = clock();
-			cout << "trans"<< e - s << "ms" << endl;
+			warpAffine(dst2, rot_image, rot_mat, Size(dst2.size()));//原图像旋转
+
 			// 得到每一个种子的图
 			Mat ROI = rot_image(Rect(Q.first, Q.second));
 			
 			// 汇总到一张图 
-			putROI(ROI, 0);
+			// putROI(ROI, 0);
 			// 重置使之为0 
-//			display(ROI, "ROI");
+			// display(ROI, "ROI");
 
 			// 测试外接矩形是否成功
-		//	resize(dst2, dst2, Size(800, 600));
-		//	display(dst3, "resH");
+			resize(dst2, dst2, Size(800, 600));
+			display(dst2, "resH");
+
+			
+		
 		}
 		//display(dst, "resH");
 	}
@@ -288,7 +456,6 @@ private:
 		new_line = 0;
 		for (int i = 0; i < 20; i++) {
 			Mat dst1 = dst.clone();
-
 			// 记录信息
 			pair<int, RotatedRect> front = myqueW.top();
 			// 旋转矩阵信息
@@ -311,24 +478,94 @@ private:
 
 			if (abs(height - avgHeight) > avgHeight / 3 || abs(width - avgWidth) > avgWidth / 2) {
 				// 展示错误图像
-			//	for (int j = 0; j <= 3; j++){
-			//	//	//	//cout << P[j];
-			//		line(dst1, P[j], P[(j + 1) % 4], Scalar(0, 255, 0), 3);
-			//	}
-			////	resize(dst1, dst1, Size(800, 600));
-			//	display(dst1, "error2");
+				for (int j = 0; j <= 3; j++){
+				//	//	//cout << P[j];
+					line(dst1, P[j], P[(j + 1) % 4], Scalar(0, 255, 0), 3);
+				}
+			//	resize(dst1, dst1, Size(800, 600));
+				display(dst1, "error2");
 				i--;
 				continue;
 			}
-			//if (ratio < 0.3 || ratio > 0.61) {
-			//	i--;
-			//	continue;
-			//}
+	
 
 
-			clock_t s = clock();
+
+
+
+			
 			Mat rot_mat;
 			float angle = 0;
+
+			
+
+			/*
+		//	clock_t s2 = clock();
+			Mat mask, seg_mat, seg_final;
+			mask = dst1(Rect(res.boundingRect().tl(), res.boundingRect().br()));
+			//display(mask, "mask");
+			seg_mat = mask.clone();
+			int off_x = res.boundingRect().tl().x;
+			int off_y = res.boundingRect().tl().y;
+
+			if (!flag[ConNum]) {
+				for (int i = 0; i < contours[ConNum].size(); i++) {
+					contours[ConNum][i].x -= off_x;
+					contours[ConNum][i].y -= off_y;
+				}
+			}
+
+
+			drawContours(mask, contours, ConNum, Scalar(255, 255, 255), -1);
+
+			cvtColor(mask, mask, CV_RGB2GRAY);
+			threshold(mask, mask, 254, 255, THRESH_BINARY);
+			
+		//	display(mask, "thresh_mask");
+			mask.convertTo(mask, CV_8UC3);
+			seg_mat.copyTo(seg_final, mask);
+
+			int border = 70;
+			copyMakeBorder(seg_final, seg_final, border, border, border, border, BORDER_CONSTANT, Scalar(0, 0, 0));
+
+
+			// 得到旋转矩阵和旋转角度
+			Point2f center;
+			center.x = res.center.x - off_x + border;
+			center.y = res.center.y - off_y + border;
+
+			get_rotMat(res, rot_mat, center, angle, 1);
+			P[0].x -= (off_x - border);
+			P[0].y -= (off_y - border);
+			P[2].x -= (off_x - border);
+			P[2].y -= (off_y - border);
+			pair<Point2f, Point2f> Q_t = caclAngle(angle, P, center);
+
+		//	cout << "P1:" << P[0] << " " << "Q1" << Q_t.first << endl;
+		//	cout << "P2:" << P[2] << " " << "Q2" << Q_t.second << endl;
+			Mat test_rot;
+		//	display(seg_final, "seg");
+		//	cout << seg_final.size();
+			warpAffine(seg_final, test_rot, rot_mat, seg_final.size());
+		//	cout << test_rot.size();
+			Mat final_test;
+			final_test = test_rot(Rect(Q_t.first, Q_t.second));
+			putROI(final_test, 1);
+		//	display(test_rot, "test_rot");
+		//	imshow("test", final_test);
+		//	waitKey(0);
+			//cout<<contours[ConNum].size();
+		//	clock_t e2 = clock();
+		//	cout << "contours time:" << e2 - s2 << "ms" << endl;
+
+		*/
+
+			
+
+
+			
+
+
 			// 得到旋转矩阵和旋转角度
 			get_rotMat(res, rot_mat, angle, 1);
 			// 计算旋转之后P[0]与P[2]的坐标
@@ -339,32 +576,27 @@ private:
 
 			
 			Mat dst2 = record[ConNum];
-			threshold(dst2, dst2, 244, 255, THRESH_BINARY);
-			dst2.convertTo(dst2, CV_8UC3);
+			//threshold(dst2, dst2, 244, 255, THRESH_BINARY);
+			//dst2.convertTo(dst2, CV_8UC3);
 
-			Mat dst3;
+			//Mat dst3;
 			// display(dst2, "test2");
-			dst.copyTo(dst3, dst2);
+			//dst.copyTo(dst3, dst2);
 			
 
 			// 旋转之后的图像
 			Mat rot_image;
-			warpAffine(dst3, rot_image, rot_mat, Size(dst2.size()));//原图像旋转
+			warpAffine(dst2, rot_image, rot_mat, Size(dst2.size()));//原图像旋转
 																   // 得到每一个种子的图
-			Mat ROI = rot_image(Rect(Q.first, Q.second));
+		//	Mat ROI = rot_image(Rect(Q.first, Q.second));
 			// 汇总到一张图 
-			putROI(ROI, 1);
-			clock_t e = clock();
-			cout << e - s << "ms" << endl;
-			// 测试外接矩形是否成功
-		//	resize(dst2, dst2, Size(800, 600));
-		//	display(dst3, "resw");
-			//	display(rot_image, "rot");
+			//putROI(ROI, 1);
 
-			//Mat ROI = dstRect(Rect(P[0], P[2]));
-			//display(ROI, "testRoi");
+			// 测试外接矩形是否成功
+			resize(dst2, dst2, Size(800, 600));
+			display(dst2, "resw");
+			
 		}
-		//display(dst, "resW");
 	}
 	
 	// 画当前的轮廓 
@@ -377,20 +609,20 @@ private:
 		vector<Rect> boundingbox(1);
 		boundingbox[0]=res.boundingRect();
 		if (record[ConNum].empty()) {
-			drawContours(dst1, contours, ConNum, Scalar(255, 255, 255), -1);
+			// drawContours(dst1, contours, ConNum, Scalar(255, 255, 255), -1);
 			//	cout << boundingbox[0].tl().x << " " << boundingbox[0].tl().y << endl;
 			//	cout << boundingbox[0].br().x << " " << boundingbox[0].br().y << endl;
-			//for (int i = boundingbox[0].tl().x; i < boundingbox[0].br().x; i++) {
-			//	for (int j = boundingbox[0].tl().y; j < boundingbox[0].br().y; j++) {
-			//		//	cout << "(" << i << "," << j << ")" << " ";
-			//		if (pointPolygonTest(contours[ConNum], Point2i(i, j), false) == -1) {
-			//			dst.at<Vec3b>(j, i)[0] = 255;
-			//			dst.at<Vec3b>(j, i)[1] = 255;
-			//			dst.at<Vec3b>(j, i)[2] = 255;
-			//		}
-			//	}
-			//}
-			record[ConNum] = dst1;
+			for (int i = boundingbox[0].tl().x; i < boundingbox[0].br().x; i++) {
+				for (int j = boundingbox[0].tl().y; j < boundingbox[0].br().y; j++) {
+					//	cout << "(" << i << "," << j << ")" << " ";
+					if (pointPolygonTest(contours[ConNum], Point2i(i, j), false) == -1) {
+						dst.at<Vec3b>(j, i)[0] = 255;
+						dst.at<Vec3b>(j, i)[1] = 255;
+						dst.at<Vec3b>(j, i)[2] = 255;
+					}
+				}
+			}
+			record[ConNum] = dst;
 		}
 	//	display(dst1, "Rec");
 	//	for (int i = 0; i < contours[ConNum].size(); i++) {
@@ -402,7 +634,7 @@ private:
 	//	drawContours(dst1, contours, ConNum, color, 2, 8, heierarchy, 0, Point());
 	//	display(dst1, "Contours");
 
-		size_t e = clock();
+	//	size_t e = clock();
 		//cout << e - s << "ms" << endl;
 	}
 
@@ -429,33 +661,37 @@ private:
 	}
 
 
-public:
+private:
 	// 对种子进行排序，src为二值图（左或者右）
 	// dst为相应的原图（左或者右）
 	void SortSeed(Mat &src, Mat &dst) {
 		Mat gray;
+
 		// convert to gray
-		cvtColor(src, gray, CV_RGB2GRAY);
-		GaussianBlur(gray, gray, Size(3, 3), 0, 0);
+		//cvtColor(src, gray, CV_RGB2GRAY);
+		//GaussianBlur(src, gray, Size(3, 3), 0, 0);
 		// convert to binary
-		threshold(gray, gray, 135, 255, THRESH_BINARY);
-		// display(gray, "binary_pic");
-		// RETR_CCOMP record outer and holes
+		threshold(src, gray, 135, 255, THRESH_BINARY);
+	    display(gray, "binary_pic");
+		// RETR_EXTERNAL record outer
 		// CHAIN_APPROX_SIMPLE record conor points
-		findContours(gray, contours, heierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
+		findContours(gray, contours, heierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 		// 寻找外轮廓
-		// drawCon(dst);
+		//drawCon(dst);
 		// 寻找外接矩形
-		findRect();
-		// 获得平均的高和宽
+		findRect(dst);
+		//cout << myqueH.size();
 		pair<float, float> avg = caculateAvg(myqueH);
 		avgHeight = avg.first;
 		avgWidth = avg.second;
+		//cout << myqueH.size();
 	    // cout << avgHeight << " " << avgWidth << endl;
 		// 打印高
 		// printQue(myqueH);
 		// 展示高
-		displayHeight(myqueH, dst);
+
+		flag = vector<bool>(contours.size(), false);
+ 		displayHeight(myqueH, dst);
 	//	cout << endl;
 	//	display(final_pic, "Height");
 		//cout << endl;
@@ -465,14 +701,16 @@ public:
 	//	waitKey(0);
 		
 	}
-	
-	void getImage(Mat &src, Mat& dst1) {
+public:	
+	Mat& getImage(Mat &src, Mat& dst1) {
 		// 初始化最终的结果图
-		final_pic = Mat(src.rows, src.cols, CV_8UC3, Scalar::all(255));
+		final_pic = Mat(src.rows, src.cols, CV_8UC3, Scalar(0,0,0));
+		// 获得平均的高和宽
+		avgHeight = 0;
+		avgWidth = 0;
 		// 初始化记录长的位置
 		local = 0;
 		offset = 0;
-	
 		//获得一半图
 		Rect rect_l, rect_r;
 		rect_l = Rect(0, 0, src.cols/2, src.rows);
@@ -483,12 +721,12 @@ public:
 	//	cout << src.cols / 2 << " " << src.rows << endl;
 	//	cout << dst1.rows << " " << dst1.cols << endl;
 		dst_L = dst1(rect_l);
+		
 		SortSeed(img_L, dst_L);
 
 	//	resize(dst_L, dst_L, Size(800, 600));
 	//	display(dst_L, "left");
 
-		clock_t s = clock();
 		// 清空队列
 		while (!myqueH.empty()) {
 			myqueH.pop();
@@ -496,12 +734,9 @@ public:
 		while (!myqueW.empty()) {
 			myqueW.pop();
 		}
-		
-		// 清空记录值
+		// 测试阈值专用
 		record.clear();
-		clock_t e = clock();
-		cout << "CLEAR"<< e - s << "ms"<< endl;
-
+	
 
 		local = 0;
 		offset = src.cols/2;
@@ -513,7 +748,9 @@ public:
 	//	display(dst_R, "right");
 	//	resize(final_pic, final_pic, Size(800, 600));
 		display(final_pic, "final");
-	//	imwrite("C:/Myself/Dataset/result/F33.jpg", final_pic);
+		
+	//	imwrite("C:/Myself/Dataset/result/F24.jpg", final_pic);
+		return final_pic;
 	}
 
 
@@ -530,6 +767,9 @@ private:
 	
 	// 记录矩形是否被处理过
 	vector<Mat> record;
+
+	// 记录有没有处理过该图
+	vector<bool> flag;
 
 	// 记录轮廓
 	vector<vector<Point>> contours;
@@ -555,8 +795,9 @@ int main() {
 //	src = imread("2.jpg");
 
 	// 测试图片集
-	src = imread("C://Myself//Dataset//Rice//E5.jpg");
-	dst = imread("C://Myself//Dataset//seed//D5.jpg");
+	src = imread("D://Myself//Dataset//rice//E9.jpg", 0);
+	cout << src.channels() << endl;
+	dst = imread("D://Myself//Dataset//seed//D9.jpg");
 //	resize(src, src, Size(src.cols / 2, src.rows / 2));
 //	resize(dst, dst, Size(dst.cols / 2, dst.rows / 2));
 	// exceptional 
@@ -569,7 +810,9 @@ int main() {
 
 	// display
 	// pod.display(src, "ori");
-	seed.getImage(src, dst);
+	Mat final_test = seed.getImage(src, dst);
+	imshow("final", final_test);
+	waitKey(0);
 	size_t end = clock();
 	cout << end - start << "ms" << endl;
 	return 0;
