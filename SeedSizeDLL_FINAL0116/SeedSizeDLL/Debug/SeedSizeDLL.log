@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  SeedSizeDLL.cpp
+  callAPI.cpp
+  Generating Code...
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0116\Debug\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0116\Debug\SEEDSIZEDLL.exp
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0116\Debug\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0116\Debug\SEEDSIZEDLL.pdb (Full PDB)
