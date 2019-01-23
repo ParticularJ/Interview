@@ -1,0 +1,10 @@
+﻿  callAPI.cpp
+  SeedSizeDLL.cpp
+  stdafx.cpp
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0121\Release\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0121\Release\SEEDSIZEDLL.exp
+  Generating code
+  All 739 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0121\Release\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINAL0121\Release\SEEDSIZEDLL.pdb (Full PDB)
