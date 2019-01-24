@@ -1,0 +1,16 @@
+﻿  stdafx.cpp
+  SeedSizeDLL.cpp
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(122): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(129): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(288): warning C4018: '<': signed/unsigned mismatch
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(322): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(371): warning C4018: '<': signed/unsigned mismatch
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(460): warning C4018: '<': signed/unsigned mismatch
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(501): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\myself\opencv_project\seedsizedll_finaltolm\seedsizedll\seedsizedll.cpp(544): warning C4018: '<': signed/unsigned mismatch
+  callAPI.cpp
+  Generating Code...
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Debug\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Debug\SEEDSIZEDLL.exp
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Debug\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Debug\SEEDSIZEDLL.pdb (Full PDB)

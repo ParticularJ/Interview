@@ -1,0 +1,18 @@
+﻿  callAPI.cpp
+  SeedSizeDLL.cpp
+SeedSizeDLL.cpp(122): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+SeedSizeDLL.cpp(129): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+SeedSizeDLL.cpp(288): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(322): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+SeedSizeDLL.cpp(371): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(460): warning C4018: '<': signed/unsigned mismatch
+SeedSizeDLL.cpp(501): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+SeedSizeDLL.cpp(544): warning C4018: '<': signed/unsigned mismatch
+  stdafx.cpp
+  dllmain.cpp
+     Creating library D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Release\SEEDSIZEDLL.lib and object D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Release\SEEDSIZEDLL.exp
+  Generating code
+  All 878 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Release\SEEDSIZEDLL.dll
+  SeedSizeDLL.vcxproj -> D:\Myself\Opencv_Project\SeedSizeDLL_FINALtoLM\Release\SEEDSIZEDLL.pdb (Full PDB)
