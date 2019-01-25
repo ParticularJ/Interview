@@ -1,0 +1,16 @@
+﻿  stdafx.cpp
+  SeedSizeDLL.cpp
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(122): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(129): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(289): warning C4018: '<': signed/unsigned mismatch
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(387): warning C4018: '<': signed/unsigned mismatch
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(459): warning C4018: '<': signed/unsigned mismatch
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(461): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(503): warning C4018: '<': signed/unsigned mismatch
+c:\users\aa\desktop\csharpgetdll\seedsizedll\seedsizedll.cpp(599): warning C4018: '<': signed/unsigned mismatch
+  callAPI.cpp
+  Generating Code...
+  dllmain.cpp
+     Creating library C:\Users\AA\Desktop\cSharpGetDll\Debug\SEEDSIZEDLL.lib and object C:\Users\AA\Desktop\cSharpGetDll\Debug\SEEDSIZEDLL.exp
+  SEEDSIZEDLL.vcxproj -> C:\Users\AA\Desktop\cSharpGetDll\Debug\SEEDSIZEDLL.dll
+  SEEDSIZEDLL.vcxproj -> C:\Users\AA\Desktop\cSharpGetDll\Debug\SEEDSIZEDLL.pdb (Full PDB)

@@ -1,0 +1,11 @@
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\bin\Debug\cSharpGetDll.exe.config
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\bin\Debug\cSharpGetDll.exe
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\bin\Debug\cSharpGetDll.pdb
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\obj\Debug\cSharpGetDll.csprojResolveAssemblyReference.cache
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\obj\Debug\cSharpGetDll.exe
+G:\17_玉米考种\7_CshapGetCDll\5_creatDll2CshapGet\cSharpGetDll\obj\Debug\cSharpGetDll.pdb
+C:\Users\AA\Desktop\cSharpGetDll\bin\Debug\cSharpGetDll.exe.config
+C:\Users\AA\Desktop\cSharpGetDll\bin\Debug\cSharpGetDll.exe
+C:\Users\AA\Desktop\cSharpGetDll\bin\Debug\cSharpGetDll.pdb
+C:\Users\AA\Desktop\cSharpGetDll\obj\Debug\cSharpGetDll.exe
+C:\Users\AA\Desktop\cSharpGetDll\obj\Debug\cSharpGetDll.pdb
