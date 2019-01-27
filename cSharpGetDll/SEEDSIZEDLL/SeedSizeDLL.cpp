@@ -89,7 +89,7 @@ int plantInfo::getImage(cv::Mat &src, cv::Mat &dst, cv::Mat &final_pic, SeedInfo
 	// 获取右半张图
 	cv::Mat img_R = src(rect_r);
 	cv::Mat dst_R = dst(rect_r);
-//	SortSeed(img_R, dst_R, final_pic);
+	SortSeed(img_R, dst_R, final_pic);
 	return 1;
 }
 
@@ -438,6 +438,23 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 			root_points[0][1] = seed_global[real_ID].pt2;
 			root_points[0][2] = seed_global[real_ID].pt3;
 			root_points[0][3] = seed_global[real_ID].pt4;
+
+			/*
+			
+			// 计算对应p的q
+			for (int i = 0; i < 4; i++) {
+				int min_x = INT_MAX;
+				for (int j = 0; j < 4; j++) {
+					if (abs(P[i].x - root_points[0][j].x) + abs(P[i].y - root_points[0][j].y) < min_x) {
+						min_x = abs(P[i].x - root_points[0][j].x) + abs(P[i].y - root_points[0][j].y);
+						P[i].x = root_points[0][j].x;
+						P[i].y = root_points[0][j].y;
+					}
+				}
+			}
+			*/
+
+
 			for (int i = 0; i < 4; i++) {
 				cv::putText(dstH, std::to_string(i), P[i], 2, 1, cv::Scalar(0, 0, 255), 2);
 				cv::line(dstH, P[i], P[(i + 1) % 4], cv::Scalar(0, 255, 0), 3);
@@ -445,14 +462,18 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 
 
 			for (int i = 0; i < 4; i++) {
-				cv::putText(dstH, std::to_string(i), root_points[0][i], 2, 1, cv::Scalar(0, 0, 255), 2);
+				cv::putText(dstH, std::to_string(i), root_points[0][i], 2, 1, cv::Scalar(255, 0, 255), 2);
 				cv::line(dstH, root_points[0][i], root_points[0][(i + 1) % 4], cv::Scalar(255, 0, 0),3);
 			}
+
+
 
 
 			const cv::Point* ppt[1] = { root_points[0] };
 			int npt[] = { 4 };
 			cv::fillPoly(temp, ppt, npt, 1, cv::Scalar(255));
+
+			
 
 
 			cv::findContours(temp, contours_angle, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
@@ -463,10 +484,13 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		}
 
 
-		/*P[0].x = seed_global[real_ID].pt1.x;
+		
+
+		
+		P[0].x = seed_global[real_ID].pt1.x - segloc > 0 ? seed_global[real_ID].pt1.x - segloc: seed_global[real_ID].pt1.x;
 		P[0].y = seed_global[real_ID].pt1.y;
-		P[2].x = seed_global[real_ID].pt3.x;
-		P[2].y = seed_global[real_ID].pt3.y;*/
+		P[2].x = seed_global[real_ID].pt3.x - segloc > 0 ? seed_global[real_ID].pt3.x - segloc : seed_global[real_ID].pt3.x;
+		P[2].y = seed_global[real_ID].pt3.y;
 		
 		std::cout << P[0] << " " << P[1] << " " << P[2] << " " << P[3] << std::endl;
 		std::cout << seed_global[real_ID].pt1 << " " << seed_global[real_ID].pt2 << " " << seed_global[real_ID].pt3 << " " << seed_global[real_ID].pt4 << std::endl;
