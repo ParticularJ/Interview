@@ -50,7 +50,7 @@ int __stdcall getImage(int seedNum, uchar* dst_data, int dst_width, int dst_heig
 	}
 
 	cv::imwrite("./binary.jpg", src);
-	//	cv::imwrite("./ori.jpg", dst);
+//	cv::imwrite("./ori.jpg", dst);
 
 
 	int res = seed.getImage(src, dst, SeedSizeImg, seedInfo);

@@ -9,4 +9,3 @@ C:\Users\AA\Desktop\cSharpGetDll\obj\Release\cSharpGetDll.exe
 C:\Users\AA\Desktop\cSharpGetDll\obj\Release\cSharpGetDll.pdb
 C:\Users\AA\Desktop\cSharpGetDll\bin\Release\cSharpGetDll.exe
 C:\Users\AA\Desktop\cSharpGetDll\bin\Release\cSharpGetDll.pdb
-C:\Users\AA\Desktop\cSharpGetDll\obj\Release\cSharpGetDll.csprojResolveAssemblyReference.cache

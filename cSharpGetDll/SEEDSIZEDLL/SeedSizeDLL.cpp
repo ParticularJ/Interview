@@ -34,12 +34,20 @@ seedInfo: 种子信息的结构体
 
 plantInfo::plantInfo() {}
 
-plantInfo::plantInfo(int seed) :seedNum(seed), totalHeight(0), totalWidth(0), top_X(0), top_Y(0), bottom_X(0), bottom_Y(0), offsetw(0), offseth(0) {}
+plantInfo::plantInfo(int seed) :seedNum(seed), totalHeight(0), totalWidth(0), top_X(0), top_Y(0), bottom_X(0), bottom_Y(0), offsetw(0), offseth(0), offset_seed(0) {}
 
 plantInfo::~plantInfo() {}
 int plantInfo::getImage(cv::Mat &src, cv::Mat &dst, cv::Mat &final_pic, SeedInfo* seedInfo) {
 	final_pic = cv::Mat(cv::Size(3469, 2518), CV_8UC3, cv::Scalar(255, 255, 255));
 	//	cv::imwrite("final.jpg", final_pic);
+	// 清空队列
+	while (!myqueH.empty()) {
+		myqueH.pop();
+	}
+	while (!myqueW.empty()) {
+		myqueW.pop();
+	}
+
 
 	// 初始化最终的结果图
 	// 初始化记录长的位置
@@ -81,6 +89,7 @@ int plantInfo::getImage(cv::Mat &src, cv::Mat &dst, cv::Mat &final_pic, SeedInfo
 	// 重新初始化总高和总宽
 	totalWidth = 0;
 	totalHeight = 0;
+	offset_seed = segloc;
 
 	plantInfo::local = 20;
 	plantInfo::offsetw = 870;
@@ -147,16 +156,20 @@ void plantInfo::findRect() {
 // 将结果放置一张图上
 void plantInfo::putROI(cv::Mat &roi, cv::Mat &final_pic, int flag, int ID) {
 	cv::Mat roi_img;
+	double font_scale=1;
+	if (std::min(roi.rows, roi.cols) < 20)
+		font_scale = 0.6;
+
 
 	if (local + roi.rows < final_pic.rows) {
 		if (flag == 0) {
 			roi_img = (final_pic(cv::Range(local, local + roi.rows), cv::Range(0 + offset, offset + roi.cols)));
-			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + avgHeight), (local + roi.rows - 5)), 2, 1, cv::Scalar(0, 0, 255), 1);
+			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + avgHeight), (local + roi.rows - 5)), 2, font_scale, cv::Scalar(0, 0, 255), 1);
 			local += roi.rows;
 		}
 		else {
 			roi_img = (final_pic(cv::Range(local, local + roi.rows), cv::Range(0 + offset, offset + roi.cols)));
-			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + avgHeight + 30), (local + roi.rows - 5)), 2, 1, cv::Scalar(0, 0, 255), 1);
+			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + avgHeight + 30), (local + roi.rows - 5)), 2, font_scale, cv::Scalar(0, 0, 255), 1);
 			local += roi.rows;
 		}
 	}
@@ -164,13 +177,13 @@ void plantInfo::putROI(cv::Mat &roi, cv::Mat &final_pic, int flag, int ID) {
 		if (flag == 0) {
 			bottom_Y = local;
 			roi_img = (final_pic(cv::Range(new_line, new_line + roi.rows), cv::Range(offset + 300, offset + 300 + roi.cols)));
-			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + 300 + avgHeight), (roi.rows + new_line)), 2, 1, cv::Scalar(0, 0, 255), 1);
+			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + 300 + avgHeight), (roi.rows + new_line)), 2, font_scale, cv::Scalar(0, 0, 255), 1);
 			new_line += roi.rows;
 		}
 		else {
 			bottom_Y = local;
 			roi_img = (final_pic(cv::Range(new_line, new_line + roi.rows), cv::Range(offset + 300, offset + 300 + roi.cols)));
-			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + 300 + avgHeight + 30), (roi.rows + new_line)), 2, 1, cv::Scalar(0, 0, 255), 1);
+			putText(final_pic, "ID:" + std::to_string(ID), cv::Point(static_cast<int>(offset + 300 + avgHeight + 30), (roi.rows + new_line)), 2, font_scale, cv::Scalar(0, 0, 255), 1);
 			new_line += roi.rows;
 		}
 	}
@@ -283,9 +296,8 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 	// 初始化顶格后新的行
 	new_line = 20;
 	top_Y = new_line;
-	std::ofstream Outfile("test.txt");
-
-
+//	std::ofstream Outfile("test.txt");
+	
 	int totalNum = seedNum < contours.size() ? seedNum : contours.size();
 	for (int i = 0; i < totalNum; i++) {
 		// 拷贝一份新图
@@ -314,10 +326,6 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		else
 			weightRatio = 3;
 
-		
-
-		
-
 		if (abs(height - avgHeight) > avgHeight / 3 || abs(width - avgWidth) > avgWidth / weightRatio ) {
 			i--;
 			continue;
@@ -333,7 +341,7 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 			continue;
 		}
 
-		std::cout << convexLength / contoursLength << std::endl;
+//		std::cout << convexLength / contoursLength << std::endl;
 		// 针对小种子
 		if (width < 20) {
 			if (cv::contourArea(contours[ConNum]) < avgArea - 50) {
@@ -351,11 +359,11 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		for (size_t i = 0; i < 2000; i++) {
 			if (seed_global[i].sWide == 0 && seed_global[i].sLength == 0)
 				break;
-			int real_x = seed_global[i].centerPt.x > segloc ? seed_global[i].centerPt.x - segloc : seed_global[i].centerPt.x;
+			int real_x = seed_global[i].centerPt.x;
 			int real_y = seed_global[i].centerPt.y;
 
-			if (abs(real_x - static_cast<int>(res.center.x)) + abs(real_y - static_cast<int>(res.center.y)) < min_dist) {
-				min_dist = abs(real_x - static_cast<int>(res.center.x)) + abs(real_y - static_cast<int>(res.center.y));
+			if (abs(real_x - static_cast<int>(res.center.x + offset_seed)) + abs(real_y - static_cast<int>(res.center.y)) < min_dist) {
+				min_dist = abs(real_x - static_cast<int>(res.center.x + offset_seed)) + abs(real_y - static_cast<int>(res.center.y));
 				real_ID = seed_global[i].ID;
 			}
 		}
@@ -374,7 +382,7 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		// 测试分割开旋转，截取
 		cv::Mat mask, seg_mat, seg_final;
 		// 包含种子得外接矩形
-		std::cout << cv::Rect(res.boundingRect().tl(), res.boundingRect().br()) << std::endl;
+//		std::cout << cv::Rect(res.boundingRect().tl(), res.boundingRect().br()) << std::endl;
 
 		mask = dst1(cv::Rect(res.boundingRect().tl(), res.boundingRect().br()));
 		// 切割图
@@ -430,7 +438,7 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		// 存储计算旋转矩阵得contours
 		if (real_ID != -1) {
 			// 计算旋转角度用图
-			cv::Mat temp(cv::Size(final_pic.cols, final_pic.rows), CV_8U, cv::Scalar(0));
+			
 			std::vector<std::vector<cv::Point>> contours_angle;
 
 			cv::Point root_points[1][4];
@@ -439,23 +447,7 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 			root_points[0][2] = seed_global[real_ID].pt3;
 			root_points[0][3] = seed_global[real_ID].pt4;
 
-			/*
-			
-			// 计算对应p的q
-			for (int i = 0; i < 4; i++) {
-				int min_x = INT_MAX;
-				for (int j = 0; j < 4; j++) {
-					if (abs(P[i].x - root_points[0][j].x) + abs(P[i].y - root_points[0][j].y) < min_x) {
-						min_x = abs(P[i].x - root_points[0][j].x) + abs(P[i].y - root_points[0][j].y);
-						P[i].x = root_points[0][j].x;
-						P[i].y = root_points[0][j].y;
-					}
-				}
-			}
-			*/
-
-
-			for (int i = 0; i < 4; i++) {
+			/*for (int i = 0; i < 4; i++) {
 				cv::putText(dstH, std::to_string(i), P[i], 2, 1, cv::Scalar(0, 0, 255), 2);
 				cv::line(dstH, P[i], P[(i + 1) % 4], cv::Scalar(0, 255, 0), 3);
 			}
@@ -463,10 +455,11 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 
 			for (int i = 0; i < 4; i++) {
 				cv::putText(dstH, std::to_string(i), root_points[0][i], 2, 1, cv::Scalar(255, 0, 255), 2);
-				cv::line(dstH, root_points[0][i], root_points[0][(i + 1) % 4], cv::Scalar(255, 0, 0),3);
-			}
+				cv::line(dstH, root_points[0][i], root_points[0][(i + 1) % 4], cv::Scalar(255, 0, 0),5);
+			}*/
 
 
+			cv::Mat temp(cv::Size(final_pic.cols, final_pic.rows), CV_8U, cv::Scalar(0));
 
 
 			const cv::Point* ppt[1] = { root_points[0] };
@@ -479,7 +472,8 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 			cv::findContours(temp, contours_angle, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 			for (int i = 0; i < contours_angle.size(); i++) {
 				true_rect = cv::minAreaRect(contours_angle[i]);
-				ture_angle = true_rect.angle;
+
+			//	ture_angle = true_rect.angle;
 			}
 		}
 
@@ -487,20 +481,31 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		
 
 		
-		P[0].x = seed_global[real_ID].pt1.x - segloc > 0 ? seed_global[real_ID].pt1.x - segloc: seed_global[real_ID].pt1.x;
-		P[0].y = seed_global[real_ID].pt1.y;
-		P[2].x = seed_global[real_ID].pt3.x - segloc > 0 ? seed_global[real_ID].pt3.x - segloc : seed_global[real_ID].pt3.x;
-		P[2].y = seed_global[real_ID].pt3.y;
 		
-		std::cout << P[0] << " " << P[1] << " " << P[2] << " " << P[3] << std::endl;
-		std::cout << seed_global[real_ID].pt1 << " " << seed_global[real_ID].pt2 << " " << seed_global[real_ID].pt3 << " " << seed_global[real_ID].pt4 << std::endl;
+		
+	//	std::cout << P[0] << " " << P[1] << " " << P[2] << " " << P[3] << std::endl;
+	//	std::cout << seed_global[real_ID].pt1 << " " << seed_global[real_ID].pt2 << " " << seed_global[real_ID].pt3 << " " << seed_global[real_ID].pt4 << std::endl;
 
+
+		float H = std::max(cv::minAreaRect(contours[ConNum]).size.height, cv::minAreaRect(contours[ConNum]).size.width);
+		float W = std::min(cv::minAreaRect(contours[ConNum]).size.height, cv::minAreaRect(contours[ConNum]).size.width);
+		
+		// std::cout << "The ID:"<<real_ID<<" "<< H / W << std::endl;
 	
+		if (H / W < 2.5) {
+			P[0].x = seed_global[real_ID].pt1.x - segloc > 0 ? seed_global[real_ID].pt1.x - segloc : seed_global[real_ID].pt1.x;
+			P[0].y = seed_global[real_ID].pt1.y;
+			P[2].x = seed_global[real_ID].pt3.x - segloc > 0 ? seed_global[real_ID].pt3.x - segloc : seed_global[real_ID].pt3.x;
+			P[2].y = seed_global[real_ID].pt3.y;
 
-		get_rotMat(true_rect, rot_mat, center, angle, 0);
+			get_rotMat(true_rect, rot_mat, center, angle, 0);
+		}
+		else{
+			get_rotMat(res, rot_mat, center, angle, 0);
+		}
 
-		Outfile << "local angle: " << res.angle << std::endl;
-		Outfile << "real angele: " << ture_angle << std::endl;
+//		Outfile << "local angle: " << res.angle << std::endl;
+//		Outfile << "real angele: " << ture_angle << std::endl;
 		P[0].x -= (off_x - border);
 		P[0].y -= (off_y - border);
 		P[2].x -= (off_x - border);
@@ -511,10 +516,11 @@ void plantInfo::displayHeight(std::priority_queue <std::pair<int, cv::RotatedRec
 		warpAffine(seg_final, test_rot, rot_mat, seg_final.size());
 		cv::Mat final_test;
 		final_test = test_rot(cv::Rect(Q_t.first, Q_t.second));
+	//	std::cout << final_test.size() << std::endl;
 		putROI(final_test, final_pic, 0, real_ID + 1);
 	}
-	cv::imwrite("testH.jpg", dstH);
-	Outfile.close();
+//	cv::imwrite("testH.jpg", dstH);
+//	Outfile.close();
 	putLength("H:", totalHeight, final_pic);
 	offset = final_pic.cols / 2 + offsetw;
 }
@@ -592,10 +598,10 @@ void plantInfo::displayWidth(std::priority_queue <std::pair<int, cv::RotatedRect
 			if (seed_global[i].sWide == 0 && seed_global[i].sLength == 0)
 				break;
 
-			int real_x = seed_global[i].centerPt.x > segloc ? seed_global[i].centerPt.x - segloc : seed_global[i].centerPt.x;
+			int real_x = seed_global[i].centerPt.x;
 			int real_y = seed_global[i].centerPt.y;
-			if (abs(real_x - static_cast<int>(res.center.x)) + abs(real_y - static_cast<int>(res.center.y)) < min_dist) {
-				min_dist = abs(real_x - static_cast<int>(res.center.x)) + abs(real_y - static_cast<int>(res.center.y));
+			if (abs(real_x - static_cast<int>(res.center.x + offset_seed)) + abs(real_y - static_cast<int>(res.center.y)) < min_dist) {
+				min_dist = abs(real_x - static_cast<int>(res.center.x + offset_seed)) + abs(real_y - static_cast<int>(res.center.y));
 				real_ID = seed_global[i].ID;
 			}
 		}
@@ -649,7 +655,7 @@ void plantInfo::displayWidth(std::priority_queue <std::pair<int, cv::RotatedRect
 		seg_final += mask1;
 
 		int border = 70;
-		copyMakeBorder(seg_final, seg_final, border, border, border, border, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+		copyMakeBorder(seg_final, seg_final, border, border, border, border, cv::BORDER_CONSTANT, cv::Scalar(255, 255, 255));
 
 
 		// 得到旋转矩阵和旋转角度
@@ -659,8 +665,8 @@ void plantInfo::displayWidth(std::priority_queue <std::pair<int, cv::RotatedRect
 
 		// 根据新的外接矩形计算旋转角度
 
-		/*
-
+		
+		cv::RotatedRect true_rect;
 		// 存储计算旋转矩阵得contours
 		if (real_ID != -1) {
 
@@ -678,15 +684,35 @@ void plantInfo::displayWidth(std::priority_queue <std::pair<int, cv::RotatedRect
 			cv::fillPoly(temp, ppt, npt, 1, cv::Scalar(255));
 			cv::findContours(temp, contours_angle, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 			for (int i = 0; i < contours_angle.size(); i++) {
-				cv::RotatedRect true_rect = cv::minAreaRect(contours_angle[i]);
-				angle = true_rect.angle;
+				true_rect = cv::minAreaRect(contours_angle[i]);
+				// angle = true_rect.angle;
 			}
 		}
-		*/
+		
+	
+
+	//	std::cout << P[0] << " " << P[1] << " " << P[2] << " " << P[3] << std::endl;
+	//	std::cout << seed_global[real_ID].pt1 << " " << seed_global[real_ID].pt2 << " " << seed_global[real_ID].pt3 << " " << seed_global[real_ID].pt4 << std::endl;
+		float H = std::max(cv::minAreaRect(contours[ConNum]).size.height, cv::minAreaRect(contours[ConNum]).size.width);
+		float W = std::min(cv::minAreaRect(contours[ConNum]).size.height, cv::minAreaRect(contours[ConNum]).size.width);
+
+		// std::cout << "The ID:" << real_ID << " " << H / W << std::endl;
+
+		if (H / W < 2.5) {
+			P[0].x = seed_global[real_ID].pt1.x - segloc > 0 ? seed_global[real_ID].pt1.x - segloc : seed_global[real_ID].pt1.x;
+			P[0].y = seed_global[real_ID].pt1.y;
+			P[2].x = seed_global[real_ID].pt3.x - segloc > 0 ? seed_global[real_ID].pt3.x - segloc : seed_global[real_ID].pt3.x;
+			P[2].y = seed_global[real_ID].pt3.y;
+
+			get_rotMat(true_rect, rot_mat, center, angle, 1);
+		}
+		else {
+			get_rotMat(res, rot_mat, center, angle, 1);
+		}
 
 
 
-		get_rotMat(res, rot_mat, center, angle, 1);
+	//	get_rotMat(res, rot_mat, center, angle, 1);
 		P[0].x -= (off_x - border);
 		P[0].y -= (off_y - border);
 		P[2].x -= (off_x - border);

@@ -87,6 +87,8 @@ private:
 	int top_Y;
 	int bottom_X;
 	int bottom_Y;
+	// 种子的左右偏移量
+	int offset_seed;
 
 	// 记录结构体
 	SeedInfo *seed_global;

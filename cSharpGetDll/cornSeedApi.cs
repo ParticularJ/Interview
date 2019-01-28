@@ -241,10 +241,10 @@ namespace cSharpGetDll
             //散粒图像参数向真实参数映射
             cornSeedApi.seedSetRatio(2.0f*25.4f / 300.0f);
             //设置种子类型
-            cornSeedApi.seedSetChoose(1);// 1代表玉米粒 2代表小麦
+            cornSeedApi.seedSetChoose(3);// 1代表玉米粒 2代表小麦
 
             //  Bitmap bmp = (Bitmap)Image.FromFile("G:\\17_玉米考种\\7_CshapGetCDll\\2_测试图\\原图\\TMP0017.jpg");
-            Bitmap bmp = (Bitmap)Image.FromFile("D:\\Myself\\Dataset\\20190121\\20190121\\D1.jpg");
+            Bitmap bmp = (Bitmap)Image.FromFile("D:\\Myself\\Dataset\\20190121\\20190121\\D2.jpg");
             utils.BitMapInfo bi_dst = utils.bitmapToByteArray(bmp, 1);
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
             BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);//Format32ppRgb
@@ -264,7 +264,7 @@ namespace cSharpGetDll
             Bitmap binaryImg = new Bitmap(width, height, width * 4, PixelFormat.Format32bppArgb, pBGRAData);
             if (hObject.IsAllocated)
                 hObject.Free();
-            binaryImg.Save("7.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+       //     binaryImg.Save("7.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
             //--------------------- 2 反色-------------------------------
 
@@ -283,7 +283,7 @@ namespace cSharpGetDll
             Bitmap binaryImg2 = new Bitmap(width, height, width * 4, PixelFormat.Format32bppArgb, pBGRAData2);
             if (hObject.IsAllocated)
                 hObject.Free();
-           binaryImg2.Save("8.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+       //    binaryImg2.Save("8.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
             //--------------------------------------缩放----------------------------- 
             float mresize = 0.5f;
@@ -298,7 +298,7 @@ namespace cSharpGetDll
             Bitmap srcImg3 = new Bitmap(widthR_in, heightR_in, widthR_in * 4, PixelFormat.Format32bppArgb, pBGRAData3);
             if (hObject.IsAllocated)
                 hObject.Free();
-            srcImg3.Save("9.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+         //   srcImg3.Save("9.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
             //--------------------------------------计数----------------------------- 
 
@@ -317,32 +317,35 @@ namespace cSharpGetDll
             }
 
             //获取参数
-      //      sOneSeedInfoApi[] pClass = new sOneSeedInfoApi[arrlen_out];
-      //      for (int i = 0; i < arrlen_out; i++)
-       //     {
-       //         IntPtr ptr = new IntPtr(SeedDataArr_out.ToInt64() + Marshal.SizeOf(typeof(sOneSeedInfoApi)) * i);
-        //        pClass[i] = (sOneSeedInfoApi)Marshal.PtrToStructure(ptr, typeof(sOneSeedInfoApi));
+            //      sOneSeedInfoApi[] pClass = new sOneSeedInfoApi[arrlen_out];
+            //      for (int i = 0; i < arrlen_out; i++)
+            //     {
+            //         IntPtr ptr = new IntPtr(SeedDataArr_out.ToInt64() + Marshal.SizeOf(typeof(sOneSeedInfoApi)) * i);
+            //        pClass[i] = (sOneSeedInfoApi)Marshal.PtrToStructure(ptr, typeof(sOneSeedInfoApi));
 
-         //       Console.WriteLine(pClass[i].ID);
+            //       Console.WriteLine(pClass[i].ID);
 
-          //  }
+            //  }
 
             // ------------------种子排序-------------------------------
 
-            int final_width = 3469;
-            int final_height = 2518;
-            byte[] pfinal_pic = new byte[final_width * final_height *4];
+            
+                Console.WriteLine(1);
+                int final_width = 3469;
+                int final_height = 2518;
+                byte[] pfinal_pic = new byte[final_width * final_height * 4];
+                int res = cornSeedApi.getImage(20, bi_dst.Result, bmp.Width, bmp.Height, bi_dst.Step, pfinal_pic, SeedDataArr_out);
 
-            int res = cornSeedApi.getImage(10, bi_dst.Result, bmp.Width, bmp.Height, bi_dst.Step, pfinal_pic, SeedDataArr_out);
+
+                // 获得图片所需空间，并保存至本地
+                GCHandle hObject1 = GCHandle.Alloc(pfinal_pic, GCHandleType.Pinned);
+                IntPtr pBGRAData1 = hObject1.AddrOfPinnedObject();
+                Bitmap SeedSizeImg = new Bitmap(final_width, final_height, final_width * 4, PixelFormat.Format32bppArgb, pBGRAData1);
+                if (hObject1.IsAllocated)
+                    hObject1.Free();
+                SeedSizeImg.Save("D://Myself//Dataset//20190121//final//F2_20_2.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                Console.WriteLine(2);
             Marshal.FreeHGlobal(SeedDataArr_out); // 释放内存
-
-            // 获得图片所需空间，并保存至本地
-            GCHandle hObject1 = GCHandle.Alloc(pfinal_pic, GCHandleType.Pinned);
-            IntPtr pBGRAData1 = hObject1.AddrOfPinnedObject();
-            Bitmap SeedSizeImg = new Bitmap(final_width, final_height, final_width * 4, PixelFormat.Format32bppArgb, pBGRAData1);
-            if (hObject1.IsAllocated)
-                hObject1.Free();
-            SeedSizeImg.Save(".//final.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             return 0;
             
             //--------------------------合并------------------------------
