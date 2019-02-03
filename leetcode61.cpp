@@ -12,6 +12,8 @@ public:
 		if (head == NULL || k == 0)return head;
 		ListNode *temp = head;
 		int count = 1;
+
+
 		//统计长度
 		while (temp->next) {
 			temp = temp->next;
@@ -19,7 +21,7 @@ public:
 		}
 		// 成环
 		temp->next = head;
-		//要断的位置
+		//要断的位置    
 		int index = k % count;
 		// count-index 要挪动几次
 		for (int i = 0; i < count - index; i++) {
