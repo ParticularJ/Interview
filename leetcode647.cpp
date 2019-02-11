@@ -37,6 +37,7 @@ class Solution {
 		int res = 0;
 		for (int i = 0; i < size; i++) {
 			int l = i, r = i;
+
 			// 计算对称的回文数,例如“aaa"
 			// 计算的是 a, a, aaa
 			while (l - 1 >= 0 && r + 1 < size) {
