@@ -5,6 +5,8 @@ public:
 		stack<string> st;
 		for (int i = 0; i<size;) {
 			// 略过第一个'/'
+
+
 			i += 1;
 			if (i == size)break;
 			// 排除 "///"情况
