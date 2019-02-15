@@ -18,8 +18,6 @@ public:
 		inorder(root->left);
 		res.push_back(root->val);
 		inorder(root->right);
-
-
 	}
 
 
