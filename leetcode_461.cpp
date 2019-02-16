@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 
 using namespace std;
 
@@ -14,6 +14,8 @@ public:
       int bx = x % 2;
       int by = y % 2;
       if(bx!=by)res++;
+
+
       x /=2;
       y /=2;
     }
