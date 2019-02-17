@@ -4,6 +4,8 @@
 class Solution {
 public:
 	vector<int> searchRange(vector<int>& nums, int target) {
+
+
 		int size = nums.size();
 		vector<int> res(2, -1);
 		int l = 0, r = size - 1;
