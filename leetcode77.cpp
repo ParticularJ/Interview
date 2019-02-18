@@ -30,6 +30,8 @@ public:
 		// 优化，我们保证每次有k个元素即可，
 		// 则，k-temp.size()说明还有多少个空位, [i,..., n]要有这么多的空位
 		// 所以范围为n-(k-temp.size())+1
+
+
 		for (int i = index; i <= n - (k - temp.size()) + 1; i++) {
 			temp.push_back(i+1);
 			dfs(n, k, i, temp);
