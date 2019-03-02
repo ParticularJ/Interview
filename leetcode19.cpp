@@ -6,6 +6,8 @@
 *     ListNode(int x) : val(x), next(NULL) {}
 * };
 */
+
+
 class Solution {
 public:
 	ListNode* removeNthFromEnd(ListNode* head, int n) {
@@ -23,6 +25,7 @@ public:
 			pre = pre->next;
 		}
 		// delNode ¼ÇÒä±ãÓÚÉ¾³ý
+
 		ListNode *delNode = pre->next;
 		pre->next = delNode->next;
 		delete delNode;
