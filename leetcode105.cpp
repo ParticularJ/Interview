@@ -15,6 +15,7 @@
 		 2   3
 		/\   /\
 	   4  5 6  7
+
    preorder [1, 2, 4, 5, 3, 6 , 7]
    inorder [4, 2, 5, 1, 6, 3, 7]
    postorder [4, 5, 2, 6, 7, 3, 1]
@@ -23,9 +24,12 @@
    前序遍历的前面为左孩子，后面为右孩子
    后序遍历的前面为左孩子，后面为右孩子
 */
+
+
 class Solution {
 public:
 	vector<int> pre, in;
+
 	TreeNode *build(int pl, int pr, int il, int ir) {
 		if (pl > pr)
 			return NUll;
