@@ -7,6 +7,8 @@
 *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 * };
 */
+
+
 class Solution {
 public:
 	TreeNode* createBST(vector<int>& nums, int l, int r) {
@@ -16,6 +18,8 @@ public:
 			return new TreeNode(nums[r]);
 
 		// 以中间结点为根
+
+
 		int mid = l + (r - l) / 2;
 		TreeNode *root = new TreeNode(nums[mid]);
 		root->left = createBST(nums, l, mid - 1);
