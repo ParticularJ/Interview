@@ -40,11 +40,6 @@ public:
 					// memo[2] = memo[2] + memo[2-2]
 					// “¿¥Œ¿‡Õ∆
 					memo[j] += memo[j - nums[i]];
-
 		return memo[target];
-
-
-
-
 	}
 };
