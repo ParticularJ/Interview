@@ -30,7 +30,6 @@ public:
 		// 初始化数组
 		vector<int> memo(target + 1, 0);
 		memo[0] = 1;
-
 		for (int i = 1; i < target+1; i++)
 			for (int j = 0; j < size; j++)
 				if (i >= nums[j])
@@ -40,6 +39,7 @@ public:
 					// memo[2] = memo[2] + memo[2-2]
 					// 依次类推
 					memo[j] += memo[j - nums[i]];
+		// 依次类推，当前的加上减去当前的。
 		return memo[target];
 	}
 };
